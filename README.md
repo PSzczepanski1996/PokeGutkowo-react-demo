@@ -1,6 +1,6 @@
 # PokeGutkowo
-![logo](logo.png)
-Aplikacja mająca na celu zrzeszenie gutkowiańskich graczy PokemonGO.
+![logo](logo.png)\
+Aplikacja mająca na celu zrzeszenie gutkowiańskich graczy PokemonGO.\
 *Cii, mam fobię społeczną i pewnie jej nigdy nie użyję, ale może się uda XD*
 
 ### Wymagania:
