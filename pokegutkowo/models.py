@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -33,7 +34,11 @@ class Team(models.Model):
 class Settings(SingleInstanceMixin, models.Model):
     title = models.CharField("Nazwa strony", max_length=255)
     owner_nick = models.CharField("Nick postaci właściciela", max_length=255)
-    team = models.ForeignKey(Team, verbose_name="Drużyna właściciela")
+    owner_team = models.ForeignKey(Team, verbose_name="Drużyna właściciela", on_delete=models.CASCADE)
+    owner_about = RichTextField("O właścicielu")
+    owner_screenshot = models.ImageField("Screenshot właściciela")
+    discord = models.URLField("Link do discorda", max_length=255)
+
 
     class Meta:
         verbose_name = "Ustawienia"
@@ -47,7 +52,7 @@ class TopPlayers(models.Model):
     nickname = models.CharField("Nick", max_length=255)
     level = models.IntegerField("Poziom")
 
-    team = models.ForeignKey(Team, verbose_name="Drużyna")
+    team = models.ForeignKey(Team, verbose_name="Drużyna", on_delete=models.CASCADE)
     trainer_code = models.CharField("Kod trenera", max_length=12, null=True, blank=True)
 
     class Meta:
