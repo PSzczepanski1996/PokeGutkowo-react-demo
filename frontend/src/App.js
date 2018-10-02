@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import './index.css';
 
-class App extends Component {
+class Players extends Component {
     state = {
         objects: []
     }
@@ -20,12 +21,13 @@ class App extends Component {
     render(){
         return (
             <div>
+            <h1><b>Gracze PokeGutkowo</b></h1>
             {this.state.objects.map(item => (
-                <div>
-                    <h1>{item.nickname}</h1>
-                    <h2>{item.level}</h2>
-                    <h3>{item.team}</h3>
-                    <h4>{item.trainer}</h4>
+                <div class='player-class'>
+                    <h2>{item.nickname}</h2>
+                    <h3>{item.level}</h3>
+                    <h4>{item.team}</h4>
+                    <h5>{item.trainer}</h5>
                 </div>
             ))}
             </div>
@@ -33,4 +35,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default Players;
