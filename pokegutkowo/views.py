@@ -1,6 +1,9 @@
 # Create your views here.
-from django.views.generic import TemplateView
+from rest_framework import generics
+from pokegutkowo.models import Players
+from pokegutkowo.serializers import TopPlayersSerializer
 
 
-class MainView(TemplateView):
-    template_name = "index.html"
+class PlayersView(generics.ListCreateAPIView):
+    queryset = Players.objects.all()
+    serializer_class = TopPlayersSerializer

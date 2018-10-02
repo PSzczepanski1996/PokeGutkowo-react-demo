@@ -13,6 +13,7 @@ class SingleInstanceMixin(object):
             raise ValidationError("Można utworzyć tylko 1 %s instancję!" % model.__name__)
         super(SingleInstanceMixin, self).clean()
 
+
 POGO_TEAMS = (
         ('instinct', 'Instinct'),
         ('mystic', 'Mystic'),
@@ -20,25 +21,27 @@ POGO_TEAMS = (
 )
 
 
-class Team(models.Model):
+class Players(models.Model):
+    nickname = models.CharField("Nick", max_length=255)
+    level = models.IntegerField("Poziom")
+
     team = models.CharField("Zespół", max_length=255, choices=POGO_TEAMS)
+    trainer_code = models.CharField("Kod trenera", max_length=12, null=True, blank=True)
 
     class Meta:
-        verbose_name = "Drużyna"
-        verbose_name_plural = "Drużyny"
+        verbose_name = "Gracz"
+        verbose_name_plural = "Gracze"
 
     def __str__(self):
-        return "Drużyna: " + self.team
+        return "Gracz o nicku: " + self.nickname
 
 
 class Settings(SingleInstanceMixin, models.Model):
     title = models.CharField("Nazwa strony", max_length=255)
-    owner_nick = models.CharField("Nick postaci właściciela", max_length=255)
-    owner_team = models.ForeignKey(Team, verbose_name="Drużyna właściciela", on_delete=models.CASCADE)
+    owner_acc = models.ForeignKey(Players, max_length=255, on_delete=models.CASCADE)
     owner_about = RichTextField("O właścicielu")
     owner_screenshot = models.ImageField("Screenshot właściciela")
     discord = models.URLField("Link do discorda", max_length=255)
-
 
     class Meta:
         verbose_name = "Ustawienia"
@@ -46,18 +49,3 @@ class Settings(SingleInstanceMixin, models.Model):
 
     def __str__(self):
         return "Ustawienia"
-
-
-class TopPlayers(models.Model):
-    nickname = models.CharField("Nick", max_length=255)
-    level = models.IntegerField("Poziom")
-
-    team = models.ForeignKey(Team, verbose_name="Drużyna", on_delete=models.CASCADE)
-    trainer_code = models.CharField("Kod trenera", max_length=12, null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Topowy gracz"
-        verbose_name_plural = "Topowi gracze"
-
-    def __str__(self):
-        return "Gracz o nicku: " + self.nickname
