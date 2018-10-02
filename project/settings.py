@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'pokegutkowo',
     'sorl.thumbnail',
     'ckeditor',
+    'rest_framework',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,3 +135,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'apps_static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000/'
+)
