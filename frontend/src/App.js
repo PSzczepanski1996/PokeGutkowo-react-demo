@@ -1,17 +1,32 @@
 import React, { Component } from 'react';
 import './index.css';
 
+function headerColor(playerTeam){
+    const prefix = 'card-header '
+
+    switch(playerTeam){
+        case 'instinct': return prefix + 'bg-warning'
+        case 'mystic': return prefix + 'bg-primary'
+        case 'valor': return prefix + 'bg-danger'
+        default: return prefix + 'bg-light'
+    }
+}
+
 class Players extends Component {
     state = {
-        objects: []
+        objects: [],
+        isLoading: false,
     }
 
     async componentDidMount(){
         try {
+            this.setState({ isLoading: true });
+
             const res = await fetch('http://127.0.0.1:8000/players_api/')
             const objects = await res.json();
             this.setState({
-                objects
+                objects: objects,
+                isLoading: false
             });
         } catch(e){
             console.log(e);
@@ -19,15 +34,20 @@ class Players extends Component {
     }
 
     render(){
+        if(this.state.isLoading){
+            return <h7>Ładowanie</h7>;
+        }
         return (
-            <div>
-            <h1><b>Gracze PokeGutkowo</b></h1>
+            <div className='col-12'>
+            <h1><b>Gracze</b></h1>
             {this.state.objects.map(item => (
-                <div class='player-class'>
-                    <h2>{item.nickname}</h2>
-                    <h3>{item.level}</h3>
-                    <h4>{item.team}</h4>
-                    <h5>{item.trainer}</h5>
+                <div className='card mb-2'>
+                    <div className={headerColor(item.team)}>
+                        <h4>Drużyna: {item.team}</h4>
+                    </div>
+                        <h5>{item.nickname}</h5>
+                        <h7>Poziom: {item.level}</h7>
+                        {item.trainer_code ? <h7>Trainer code: {item.trainer_code}</h7> : null}
                 </div>
             ))}
             </div>
