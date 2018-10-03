@@ -9,3 +9,8 @@ Aplikacja mająca na celu zrzeszenie gutkowiańskich graczy PokemonGO.\
 
 ### Testowane:
 * Arch Linux / PyCharm
+
+# Instalacja zależności
+```
+pip install -r requirements.txt
+```
