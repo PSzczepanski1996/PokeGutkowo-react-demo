@@ -15,6 +15,7 @@ function headerColor(playerTeam){
 class Players extends Component {
     state = {
         objects: [],
+        clone: [],
         isLoading: false,
     }
 
@@ -24,11 +25,8 @@ class Players extends Component {
 
             const res = await fetch('http://127.0.0.1:8000/players_api/');
             const objects = await res.json();
-            objects.map(function(v){
-                v.clickState = false
-            })
             this.setState({
-                objects,
+                objects: objects,
                 isLoading: false
             });
         } catch(e){
@@ -37,10 +35,16 @@ class Players extends Component {
     }
 
     handleClick(index){
-        let objectCopy = [...this.state.objects]
-        objectCopy[index].team = 'rocket';
+        let objectsCopy = [...this.state.objects]
+        if(objectsCopy[index].team !== 'rocket'){
+            objectsCopy[index].previousTeam = objectsCopy[index].team;
+            objectsCopy[index].team = 'rocket';
+        }
+        else{
+            objectsCopy[index].team = objectsCopy[index].previousTeam;
+        }
         this.setState({
-            objects: objectCopy
+            objects: objectsCopy
         })
     }
 
