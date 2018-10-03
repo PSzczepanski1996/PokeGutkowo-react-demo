@@ -8,7 +8,7 @@ function headerColor(playerTeam){
         case 'instinct': return prefix + 'bg-warning'
         case 'mystic': return prefix + 'bg-primary'
         case 'valor': return prefix + 'bg-danger'
-        default: return prefix + 'bg-light'
+        case 'rocket': return prefix + 'bg-light'
     }
 }
 
@@ -22,15 +22,26 @@ class Players extends Component {
         try {
             this.setState({ isLoading: true });
 
-            const res = await fetch('http://127.0.0.1:8000/players_api/')
+            const res = await fetch('http://127.0.0.1:8000/players_api/');
             const objects = await res.json();
+            objects.map(function(v){
+                v.clickState = false
+            })
             this.setState({
-                objects: objects,
+                objects,
                 isLoading: false
             });
         } catch(e){
             console.log(e);
         }
+    }
+
+    handleClick(index){
+        let objectCopy = [...this.state.objects]
+        objectCopy[index].team = 'rocket';
+        this.setState({
+            objects: objectCopy
+        })
     }
 
     render(){
@@ -40,8 +51,8 @@ class Players extends Component {
         return (
             <div className='col-12'>
             <h1><b>Gracze</b></h1>
-            {this.state.objects.map(item => (
-                <div className='card mb-2'>
+            {this.state.objects.map((item, index) => (
+                <div className='card mb-2' onClick={()=> this.handleClick(index)}>
                     <div className={headerColor(item.team)}>
                         <h4>Drużyna: {item.team}</h4>
                     </div>
