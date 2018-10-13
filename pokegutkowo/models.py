@@ -39,7 +39,7 @@ class Players(models.Model):
 class Settings(SingleInstanceMixin, models.Model):
     title = models.CharField("Nazwa strony", max_length=255)
     owner_acc = models.ForeignKey(Players, max_length=255, on_delete=models.CASCADE)
-    owner_about = RichTextField("O właścicielu")
+    owner_about = models.TextField("O właścicielu")
     owner_screenshot = models.ImageField("Screenshot właściciela")
     discord = models.URLField("Link do discorda", max_length=255)
 
