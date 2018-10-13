@@ -9,3 +9,8 @@ Aplikacja mająca na celu zrzeszenie gutkowiańskich graczy PokemonGO.\
 
 ### Testowane:
 * Windows 10 + native Python 3.6
+
+# Instalacja zależności
+```
+pip install -r requirements.txt
+```
