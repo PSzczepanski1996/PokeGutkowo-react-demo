@@ -16,3 +16,12 @@ code {
 .player-class {
     border-bottom: 1px black solid;
 }
+
+.no-margin-h3 {
+    margin: 0;
+}
+
+.jumbotron {
+    padding-top: 20px;
+    padding-bottom: 8px;
+}

@@ -17,11 +17,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from pokegutkowo.views import PlayersView, SettingsView
+from pokegutkowo.views import PlayersView, PostView, SettingsView
 from project import settings
 
 urlpatterns = [
     path('players_api/', PlayersView.as_view(), name='players_api'),
+    path('post_api/', PostView.as_view(), name='post_api'),
     path('settings_api/', SettingsView.as_view(), name='settings_api'),
     path('admin/', admin.site.urls),
 ]

@@ -4,6 +4,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class SingleInstanceMixin(object):
     """Makes sure that no more than one instance of a given model is created."""
 
@@ -36,9 +37,22 @@ class Players(models.Model):
         return "Gracz o nicku: " + self.nickname
 
 
+class Post(models.Model):
+    title = models.CharField("Tytuł postu", max_length=255)
+    context = RichTextField("Treść postu")
+    author = models.ForeignKey(Players, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Post"
+        verbose_name_plural = "Posty"
+
+    def __str__(self):
+        return "Post o tytule: " + self.title
+
+
 class Settings(SingleInstanceMixin, models.Model):
     title = models.CharField("Nazwa strony", max_length=255)
-    owner_acc = models.ForeignKey(Players, max_length=255, on_delete=models.CASCADE)
+    owner_acc = models.ForeignKey(Players, on_delete=models.CASCADE)
     owner_about = models.TextField("O właścicielu")
     owner_screenshot = models.ImageField("Screenshot właściciela")
     discord = models.URLField("Link do discorda", max_length=255)
