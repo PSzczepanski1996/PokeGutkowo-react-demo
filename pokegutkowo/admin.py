@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from pokegutkowo.models import Settings, Players
+from pokegutkowo.models import Players, Post, Settings
 
-admin.site.register(Settings)
 admin.site.register(Players)
+admin.site.register(Post)
+admin.site.register(Settings)

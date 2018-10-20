@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './index.css';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, NavLink } from 'react-router-dom';
 
 function headerColor(playerTeam){
     const prefix = 'card-header '
@@ -9,14 +9,96 @@ function headerColor(playerTeam){
         case 'instinct': return prefix + 'bg-warning'
         case 'mystic': return prefix + 'bg-primary'
         case 'valor': return prefix + 'bg-danger'
-        case 'rocket': return prefix + 'bg-light'
+    }
+}
+
+class Posts extends Component {
+    constructor(){
+        super();
+        this.state = {
+            currentPage: 1,
+            objectsPerPage: 2,
+            objects: [],
+            isLoading: false,
+        };
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(event) {
+        this.setState({
+            currentPage: Number(event.target.id)
+        })
+    }
+
+    async componentDidMount(){
+        try {
+            this.setState({ isLoading: true });
+
+            const res = await fetch('http://127.0.0.1:8000/post_api/');
+            const objects = await res.json();
+            this.setState({
+                objects: objects,
+                isLoading: false
+            });
+        } catch(e){
+            console.log(e);
+        }
+    }
+
+    render(){
+        if(this.state.isLoading){
+            return <h5>Ładowanie</h5>;
+        }
+        const { objects, currentPage, objectsPerPage } = this.state;
+        const indexOfLastObject = currentPage * objectsPerPage;
+        const indexOfFirstObject = indexOfLastObject - objectsPerPage;
+        const currentObjects = objects.slice(indexOfFirstObject, indexOfLastObject)
+
+        const renderObjects = currentObjects.map((item, index) => {
+            return(
+            <div>
+                <h3 className='no-margin-h3'>{item.title}</h3>
+                <small>Author: {item.author}</small>
+                <div className="jumbotron" dangerouslySetInnerHTML={{__html: item.context}}></div>
+            </div>
+            )
+        });
+
+        const pageNumbers = [];
+        for(let i = 1; i <= Math.ceil(objects.length / objectsPerPage); i++){
+            pageNumbers.push(i);
+        }
+
+        const renderPageNumbers = pageNumbers.map(number => {
+          return (
+            <li className="page-item">
+              <a
+                className="page-link"
+                onClick={this.handleClick}
+                key={number}
+                id={number}>
+                    {number}
+                </a>
+            </li>
+          );
+        });
+
+        return(
+            <div>
+                <div className="col-12">
+                    {renderObjects}
+                </div>
+                <ul className="pagination justify-content-end">
+                    {renderPageNumbers}
+                </ul>
+            </div>
+        )
     }
 }
 
 class Players extends Component {
     state = {
         objects: [],
-        clone: [],
         isLoading: false,
     }
 
@@ -35,20 +117,6 @@ class Players extends Component {
         }
     }
 
-    handleClick(index){
-        let objectsCopy = [...this.state.objects]
-        if(objectsCopy[index].team !== 'rocket'){
-            objectsCopy[index].previousTeam = objectsCopy[index].team;
-            objectsCopy[index].team = 'rocket';
-        }
-        else{
-            objectsCopy[index].team = objectsCopy[index].previousTeam;
-        }
-        this.setState({
-            objects: objectsCopy
-        })
-    }
-
     render(){
         if(this.state.isLoading){
             return <h5>Ładowanie</h5>;
@@ -57,7 +125,7 @@ class Players extends Component {
             <div className='col-12'>
             <h1><b>Gracze</b></h1>
             {this.state.objects.map((item, index) => (
-                <div className='card mb-2' onClick={()=> this.handleClick(index)}>
+                <div className='card mb-2'>
                     <div className={headerColor(item.team)}>
                         <h3>Drużyna: {item.team}</h3>
                     </div>
@@ -111,27 +179,30 @@ class About extends Component {
     }
 }
 
-
 class Website extends Component {
      render(){
         return(
             <div>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <a className="navbar-brand" href="#">PokeGutkowo demo</a>
+                    <a className="navbar-brand" href="/">PokeGutkowo</a>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active">
-                            <a className="nav-link" href="/">Gracze Gutkowa</a>
+                        <li className="nav-item">
+                            <NavLink to="/" exact className="nav-link" activeClassName="active">Strona główna</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="/aboutme">O mnie</a>
+                            <NavLink to="/players" className="nav-link" activeClassName="active">Gracze</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/aboutme" className="nav-link" activeClassName="active">O mnie</NavLink>
                         </li>
                     </ul>
                 </div>
                 </nav>
 
                 <Switch>
-                    <Route exact path='/' component={Players}></Route>
+                    <Route exact path='/' component={Posts}></Route>
+                    <Route exact path='/players' component={Players}></Route>
                     <Route exact path='/aboutme' component={About}></Route>
                 </Switch>
             </div>
