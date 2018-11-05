@@ -6,12 +6,12 @@ from django.db import models
 
 
 class SingleInstanceMixin(object):
-    """Makes sure that no more than one instance of a given model is created."""
+    '''Makes sure that no more than one instance of a given model is created.'''
 
     def clean(self):
         model = self.__class__
         if (model.objects.count() > 0 and self.id != model.objects.get().id):
-            raise ValidationError("Można utworzyć tylko 1 %s instancję!" % model.__name__)
+            raise ValidationError('Można utworzyć tylko 1 %s instancję!' % model.__name__)
         super(SingleInstanceMixin, self).clean()
 
 
@@ -23,43 +23,43 @@ POGO_TEAMS = (
 
 
 class Players(models.Model):
-    nickname = models.CharField("Nick", max_length=255)
-    level = models.IntegerField("Poziom")
+    nickname = models.CharField('Nick', max_length=255)
+    level = models.IntegerField('Poziom')
 
-    team = models.CharField("Zespół", max_length=255, choices=POGO_TEAMS)
-    trainer_code = models.CharField("Kod trenera", max_length=12, null=True, blank=True)
+    team = models.CharField('Zespół', max_length=255, choices=POGO_TEAMS)
+    trainer_code = models.CharField('Kod trenera', max_length=12, null=True, blank=True)
 
     class Meta:
-        verbose_name = "Gracz"
-        verbose_name_plural = "Gracze"
+        verbose_name = 'Gracz'
+        verbose_name_plural = 'Gracze'
 
     def __str__(self):
-        return "Gracz o nicku: " + self.nickname
+        return 'Gracz o nicku: ' + self.nickname
 
 
 class Post(models.Model):
-    title = models.CharField("Tytuł postu", max_length=255)
-    context = RichTextField("Treść postu")
+    title = models.CharField('Tytuł postu', max_length=255)
+    context = RichTextField('Treść postu')
     author = models.ForeignKey(Players, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = "Post"
-        verbose_name_plural = "Posty"
+        verbose_name = 'Post'
+        verbose_name_plural = 'Posty'
 
     def __str__(self):
-        return "Post o tytule: " + self.title
+        return 'Post o tytule: ' + self.title
 
 
 class Settings(SingleInstanceMixin, models.Model):
-    title = models.CharField("Nazwa strony", max_length=255)
+    title = models.CharField('Nazwa strony', max_length=255)
     owner_acc = models.ForeignKey(Players, on_delete=models.CASCADE)
-    owner_about = models.TextField("O właścicielu")
-    owner_screenshot = models.ImageField("Screenshot właściciela")
-    discord = models.URLField("Link do discorda", max_length=255)
+    owner_about = models.TextField('O właścicielu')
+    owner_screenshot = models.ImageField('Screenshot właściciela')
+    discord = models.URLField('Link do discorda', max_length=255)
 
     class Meta:
-        verbose_name = "Ustawienia"
-        verbose_name_plural = "Ustawienia"
+        verbose_name = 'Ustawienia'
+        verbose_name_plural = 'Ustawienia'
 
     def __str__(self):
-        return "Ustawienia"
+        return 'Ustawienia'

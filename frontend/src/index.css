@@ -9,8 +9,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .player-class {
@@ -24,4 +23,13 @@ code {
 .jumbotron {
     padding-top: 20px;
     padding-bottom: 8px;
+}
+
+.owner-image {
+    width: 320px;
+}
+
+.pagination {
+    float: right;
+    margin-right: 16px;
 }
