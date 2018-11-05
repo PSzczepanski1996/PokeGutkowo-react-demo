@@ -59,7 +59,7 @@ class Posts extends Component {
             <div>
                 <h3 className='no-margin-h3'>{item.title}</h3>
                 <small>Author: {item.author}</small>
-                <div className="jumbotron" dangerouslySetInnerHTML={{__html: item.context}}></div>
+                <div className='jumbotron' dangerouslySetInnerHTML={{__html: item.context}}></div>
             </div>
             )
         });
@@ -71,9 +71,9 @@ class Posts extends Component {
 
         const renderPageNumbers = pageNumbers.map(number => {
           return (
-            <li className="page-item">
+            <li className={number == this.state.currentPage ? 'page-item active' : 'page-item'}>
               <a
-                className="page-link"
+                className='page-link'
                 onClick={this.handleClick}
                 key={number}
                 id={number}>
@@ -85,10 +85,10 @@ class Posts extends Component {
 
         return(
             <div>
-                <div className="col-12">
+                <div className='col-12'>
                     {renderObjects}
                 </div>
-                <ul className="pagination justify-content-end">
+                <ul className='pagination'>
                     {renderPageNumbers}
                 </ul>
             </div>
@@ -167,11 +167,14 @@ class About extends Component {
         return(
             <div>
             {this.state.objects.map((item, index) => (
-                    <div>
+                    <div className='container-fluid'>
                         <b>O mnie:</b>
                         <p>{item.owner_about}</p>
                         <b>Link do Discorda:</b>
                         <p><a href={item.discord}>Discord</a></p>
+                        <center>
+                            <img src={item.owner_screenshot} className='owner-image'></img>
+                        </center>
                     </div>
             ))}
             </div>
@@ -179,22 +182,56 @@ class About extends Component {
     }
 }
 
+class Title extends Component {
+    state = {
+        objects: [],
+        isLoading: false,
+    }
+
+    async componentDidMount(){
+        try {
+            this.setState({ isLoading: true });
+
+            const res = await fetch('http://127.0.0.1:8000/settings_api/');
+            const objects = await res.json();
+            this.setState({
+                objects: objects,
+                isLoading: false
+            });
+        } catch(e){
+            console.log(e);
+        }
+    }
+
+    render(){
+        return(
+            <div>
+                {this.state.objects.map((settings, index) => (
+                    <div>
+                        {settings.title}
+                    </div>
+            ))}
+            </div>
+        )
+    }
+}
+
 class Website extends Component {
      render(){
         return(
             <div>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <a className="navbar-brand" href="/">PokeGutkowo</a>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item">
-                            <NavLink to="/" exact className="nav-link" activeClassName="active">Strona główna</NavLink>
+                <nav className='navbar navbar-expand-lg navbar-light bg-light'>
+                    <a className='navbar-brand' href="/"><Title/></a>
+                    <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+                    <ul className='navbar-nav mr-auto'>
+                        <li className='nav-item'>
+                            <NavLink to='/' exact className='nav-link' activeClassName='active'>Strona główna</NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink to="/players" className="nav-link" activeClassName="active">Gracze</NavLink>
+                        <li className='nav-item'>
+                            <NavLink to='/players' className='nav-link' activeClassName='active'>Gracze</NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink to="/aboutme" className="nav-link" activeClassName="active">O mnie</NavLink>
+                        <li className='nav-item'>
+                            <NavLink to='/aboutme' className='nav-link' activeClassName='active'>O mnie</NavLink>
                         </li>
                     </ul>
                 </div>
